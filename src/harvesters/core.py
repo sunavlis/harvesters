@@ -1311,6 +1311,9 @@ class Buffer(Module):
         elif p_type == PAYLOADTYPE_INFO_IDS.PAYLOAD_TYPE_MULTI_PART:
             payload = PayloadMultiPart(buffer=buffer, node_map=node_map)
 
+        elif p_type == PAYLOADTYPE_INFO_IDS.PAYLOAD_TYPE_GENDC:
+            payload = PayloadGenDC(buffer=buffer, node_map=node_map)
+
         else:
             info = json.dumps({"payload type": "{}".format(p_type)})
             _logger.warning(
@@ -1523,6 +1526,32 @@ class PayloadMultiPart(Payload):
     """
     Represents a payload that is classified as
     :const:`genicam.gentl.PAYLOADTYPE_INFO_IDS.PAYLOAD_TYPE_MULTI_PART`
+    by the GenTL Standard.
+    """
+    def __init__(self, *, buffer: _Buffer, node_map: NodeMap):
+        """
+        :param buffer:
+        :param node_map:
+        """
+        super().__init__(buffer=buffer)
+
+        for i, part in enumerate(self._buffer.parts):
+            self._components.append(
+                self._build_component(
+                    buffer=buffer, part=part, node_map=node_map))
+
+    def __repr__(self):
+        ret = ''
+        for i, c in enumerate(self.components):
+            ret += 'Component {}: {}\n'.format(i, c.__repr__())
+        ret = ret[:-1]
+        return ret
+
+
+class PayloadGenDC(Payload):
+    """
+    Represents a payload that is classified as
+    :const:`genicam.gentl.PAYLOADTYPE_INFO_IDS.PAYLOAD_TYPE_GENDC`
     by the GenTL Standard.
     """
     def __init__(self, *, buffer: _Buffer, node_map: NodeMap):
