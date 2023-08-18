@@ -848,11 +848,18 @@ class Component:
         self._data = None
 
     @property
+    def data_format_value(self) -> int:
+        """
+        int: The data type of the data component as integer value.
+        """
+        return self._buffer.pixel_format
+
+    @property
     def data_format(self) -> str:
         """
         str: The type of the data component.
         """
-        return self._buffer.data_format
+        return dict_by_ints[self.data_format_value]
 
     @property
     def data_format_namespace(self) -> PIXELFORMAT_NAMESPACE_IDS:
@@ -860,14 +867,7 @@ class Component:
         PIXELFORMAT_NAMESPACE_IDS: The data type namespace of the data
         component.
         """
-        return self._buffer.data_format
-
-    @property
-    def source_id(self) -> int:
-        """
-        int: The source ID of the data component.
-        """
-        return self._buffer.source_id
+        return self._buffer.pixel_format_name_space
 
     @property
     def data(self) -> Union[numpy.ndarray, None]:
