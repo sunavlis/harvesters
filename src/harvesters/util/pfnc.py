@@ -3267,3 +3267,5 @@ class Dictionary:
 
 
 component_2d_formats = [p.symbolic for p in Dictionary.get_pixel_formats()]
+
+component_1d_formats = [n for i, n in symbolics.items() if n[0:4] == "Data"]
